@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, {Fragment, useState } from "react";
 
 const octaves = [1, 2, 3, 4, 5, 6, 7];
 const tones = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
@@ -11,13 +11,17 @@ const Keyboard = ({
     startKey,
     endKey
 }) => {
+    console.log(octaves);
+    console.log(tones);
+    console.log(AllNotes);
+
     const [state, setState] = useState({
         playingKeys: [],
         keyLogger:[]
     });
 
     const layedOutKeys = AllNotes.slice(AllNotes.indexOf(startKey), AllNotes.indexOf(endKey));
-    
+
     const whiteKey = (keyText, isPlaying, eventHandlers) => {
         return(
             <button className={`white-key ${isPlaying? "white-key-playing": ""}`}
@@ -26,20 +30,12 @@ const Keyboard = ({
             </button>
         );
     };
-    // const keyDownHandler = (event) => {
-    //     console.log("===keydown===");
-    //     console.log(event);
-    // }
-    // const keyUpHandler = (event) => {
-    //     console.log("===keyup====");
-    //     console.log(event);
-    // }
     
     const blackKey = (keyText, isKeyPlaying, eventHandlers) => {
         return(
-            <div className={`black-key-wrapper`}>
+            <div className="black-key-wrapper">
                 <button className={`black-key 
-                    ${isKeyPlaying ? 'black-key-playing': ''}`}
+                    ${isKeyPlaying ? "black-key-playing": ""}`}
                     { ...eventHandlers }
                 >
                     <div className={"key-text"}>{keyText}</div>
@@ -59,13 +55,15 @@ const Keyboard = ({
     const onNoteReleased = playedKey => {
         setState({
             ...state,
-            playingKeys: this.state.playingKeys.filter(key => key !== playedKey)
+            playingKeys: state.playingKeys.filter(key => key !== playedKey)
         })
     }
   
-    const fullLayout= layedOutKeys.map((keyLayout, selectedKey) => {
+    const FullLayout = layedOutKeys.map((selectedKey) => {
+        // console.log(layedOutKeys);
+        // console.log(state);
         const RenderedKey = selectedKey.includes('#') ? blackKey : whiteKey;
-        const isKeyPlaying = this.state.playingKeys.includes(selectedKey);
+        const isKeyPlaying = state.playingKeys.includes(selectedKey);
 
         // We are only handling mouse and touch event, no keyboard event.
         const eventHandlers = {
@@ -75,28 +73,59 @@ const Keyboard = ({
             onTouchStart: () => onNotePressed(selectedKey),
             onTouchEnd: () => onNoteReleased(selectedKey)
         }
-
+        console.log(`selected-Key ${selectedKey}`);
+        console.log(`isPlaying: ${isKeyPlaying}`);
+        console.log(`RenderedFragment`);
+        
         return (
-            <RenderedKey
-                isKeyPlaying = {isKeyPlaying}
-                keyText = {selectedKey}
-                eventHandlers = {eventHandlers}
-            />
+            <Fragment key={selectedKey}>
+                <RenderedKey
+                    isKeyPlaying = {isKeyPlaying}
+                    keyText = {selectedKey}
+                    eventHandlers = {eventHandlers}
+                />
+            </Fragment>
         );
     });
-
-    const keyLogger = () => (
-        <div className={"key-logger"}>
-            <textarea>{this.state.keyLogger.join(",")}</textarea>
+    console.log("FUUUULLLL");
+    console.log({FullLayout});
+    // const KeyLogger = () => (
+    //     <div className={"key-logger"}>
+    //         <textarea readonly>{state.keyLogger.join(",")}</textarea>
+    //     </div>
+    // );
+    const ddSrc = ["A", "A#"]; const ppStt = ["A"];
+    return(
+        <div className="keyboard-container">
+        <Fragment>
+            {ddSrc.map(item => {
+                const isPlaying = ppStt.includes(item);
+                const eventHandlers = undefined;
+                if(!item.includes("#")) { 
+                    return (
+                        <Fragment key={item}>
+                            <button className={`white-key ${isPlaying? "white-key-playing": ""}`}
+                                { ...eventHandlers } >
+                                <div className={"key-text"}>{item}</div>
+                            </button>
+                        </Fragment>
+                    )
+                }
+                return (
+                    <Fragment key={item}>
+                        <div className="black-key-wrapper">
+                            <button className={`black-key ${isPlaying? "black-key-playing": ""}`}
+                                { ...eventHandlers } >
+                                <div className={"key-text"}>{item}</div>
+                            </button>
+                        </div>
+                    </Fragment>
+                ) 
+            })                
+            }
+        </Fragment>
         </div>
     );
-        
-    return(
-        <Fragment>
-            { fullLayout }
-            <keyLogger />
-        </Fragment>
-        );
 };
 
 export default Keyboard;
