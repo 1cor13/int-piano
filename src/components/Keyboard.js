@@ -20,7 +20,7 @@ const Keyboard = ({
         keyLogger:[]
     });
 
-    const layedOutKeys = AllNotes.slice(AllNotes.indexOf(startKey), AllNotes.indexOf(endKey));
+    const layedOutKeys = AllNotes.slice(AllNotes.indexOf(startKey), AllNotes.indexOf(endKey)+1);
 
     const whiteKey = (keyText, isPlaying, eventHandlers) => {
         return(
@@ -87,14 +87,13 @@ const Keyboard = ({
             </Fragment>
         );
     });
-    console.log("FUUUULLLL");
-    console.log({FullLayout});
     // const KeyLogger = () => (
     //     <div className={"key-logger"}>
     //         <textarea readonly>{state.keyLogger.join(",")}</textarea>
     //     </div>
     // );
     const ddSrc = ["A", "A#"]; const ppStt = ["A"];
+    console.log(layedOutKeys);
     return(
         <div className="keyboard-container">
         <Fragment>
