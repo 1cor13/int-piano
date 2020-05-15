@@ -5,7 +5,7 @@
   bottom: 0;
   top: 0;
   display: flex;
-  /* align-items: center; */
+  align-items: center;
   flex-direction: column;
   /* justify-content: center; */
   background: rgb(241, 236, 236);
@@ -59,9 +59,10 @@
   padding: 5px;
   outline: none;
   color: #dbdbdd;
+  transform: translateX(-50%);
 }
 
 .black-key-playing {
-  border-bottom: 10px solid blue;
-  color: blue;
+  border-bottom: 10px solid yellow;
+  color: green;
 }
