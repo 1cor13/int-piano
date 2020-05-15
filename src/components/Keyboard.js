@@ -98,7 +98,7 @@ const Keyboard = ({
     return(
         <div className="keyboard-container">
         <Fragment>
-            {ddSrc.map(item => {
+            {layedOutKeys.map(item => {
                 const isPlaying = ppStt.includes(item);
                 const eventHandlers = undefined;
                 if(!item.includes("#")) { 
