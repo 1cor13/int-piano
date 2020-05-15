@@ -5,7 +5,7 @@ import './App.css';
 
 function App() {
   return (
-    <div className="container">
+    <div className="app-container">
       <Keyboard startKey = {"C3"} endKey = {"B3"}/> 
     </div>
   );

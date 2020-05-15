@@ -1,4 +1,9 @@
-.container {
+.app-container {
+  display: inline;
+  text-align: center;
+}
+
+.keyboard-container {
   position: absolute;
   left: 0;
   right: 0;
@@ -11,7 +16,7 @@
   background: rgb(241, 236, 236);
 }
 
-.keyboard-container {
+.keyboard-layer-container {
   display: inline-flex;
   border-top: 10px solid black;
   border-left: #444 solid 5px;
@@ -19,6 +24,13 @@
   border-bottom: #444 solid 2px;
 }
 
+.key-logger-player {
+  margin: 5px;
+  display:table
+}
+.key-logger {
+  display: grid;
+}
 .white-key {
   width: 50px;
   height: 180px;
@@ -65,4 +77,8 @@
 .black-key-playing {
   border-bottom: 10px solid yellow;
   color: green;
+}
+
+.player {
+  margin:10px 0px 
 }
