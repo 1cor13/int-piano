@@ -7,7 +7,10 @@ function App() {
   return (
     <div className="app-container">
       <Keyboard startKey = {"C3"} endKey = {"B3"}/> 
+      <Keyboard startKey = {"C1"} endKey = {"B3"}/> 
+      <Keyboard startKey = {"C1"} endKey = {"B1"}/>
     </div>
+    
   );
 }
 

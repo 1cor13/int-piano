@@ -1,18 +1,19 @@
 .app-container {
-  display: inline;
+  display: flex;
   text-align: center;
-}
-
-.keyboard-container {
+  flex-direction: column;
+  justify-content: center;
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   top: 0;
+}
+
+.keyboard-container {
   display: flex;
   align-items: center;
   flex-direction: column;
-  /* justify-content: center; */
   background: rgb(241, 236, 236);
 }
 
@@ -24,13 +25,6 @@
   border-bottom: #444 solid 2px;
 }
 
-.key-logger-player {
-  margin: 5px;
-  display:table
-}
-.key-logger {
-  display: grid;
-}
 .white-key {
   width: 50px;
   height: 180px;
@@ -77,6 +71,15 @@
 .black-key-playing {
   border-bottom: 10px solid yellow;
   color: green;
+}
+
+.key-logger-player {
+  margin: 5px;
+  display:table
+}
+.key-logger {
+  display: grid;
+  background-color: gainsboro;
 }
 
 .player {
