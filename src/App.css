@@ -45,8 +45,8 @@
 }
 
 .white-key-playing {
-  border-bottom: 10px solid blue;
-  color: blue;
+  border-bottom: 10px solid red;
+  color: red;
 }
 
 .black-key-wrapper {
@@ -81,7 +81,11 @@
   display: grid;
   background-color: gainsboro;
 }
+.key-logger textarea {
+  background-color: gainsboro;
+}
 
 .player {
-  margin:10px 0px 
+  margin:10px 0px;
+  display: flex;
 }
