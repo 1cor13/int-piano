@@ -17,9 +17,7 @@ const Keyboard = ({
 }) => {
     const [state, setState] = useState({
         playingKeys: [],
-        keyLogger:"",
-        playChords: "",
-        chordsInputValue:"",
+        keyLogger:""
     });
 
     const selectedNotes = AllNotes.slice(AllNotes.indexOf(startKey), AllNotes.indexOf(endKey) + 1);
@@ -32,7 +30,7 @@ const Keyboard = ({
             </button>
         );
     };
-    
+ 
     const BlackKey = (keyText, isKeyPlaying, eventHandlers) => {
         return(
             <div className="black-key-wrapper">
@@ -44,7 +42,7 @@ const Keyboard = ({
                 </button>
             </div>
         );
-    }
+    };
 
     const onNotePressed = (playedKey) => {
         setState({
@@ -52,22 +50,17 @@ const Keyboard = ({
             playingKeys: [...state.playingKeys, playedKey],
             keyLogger: playedKey
         });
-        console.log(`played: ${playedKey}`);
-        console.log(`new log state`, state.keyLogger);
-    }
+    };
 
     const onNoteReleased = playedKey => {
         if(playedKey && selectedNotes.includes(playedKey)) {
-            console.log("before release state", state);
             setState({
                 ...state,
                 playingKeys: state.playingKeys.filter(key => key !== playedKey),
                 keyLogger:""
             });
-            console.log("after release state", state);
-        }
-        
-    }
+        }  
+    };
   
     const KeyboardLayedOut = selectedNotes.map((selectedKey) => {
         const RenderedKey = selectedKey.includes('#') ? BlackKey : WhiteKey;
@@ -77,16 +70,15 @@ const Keyboard = ({
         const eventHandlers = {
             onMouseDown: () => onNotePressed(selectedKey),
             onMouseUp: () => onNoteReleased(selectedKey),
-            // onMouseOut: () => onNoteReleased(selectedKey),
+            onMouseOut: () => onNoteReleased(selectedKey),
             onTouchStart: () => onNotePressed(selectedKey),
             onTouchEnd: () => onNoteReleased(selectedKey)
         };
 
-        const keyText = selectedKey;
         return (
             <Fragment key={selectedKey}>
                 { RenderedKey(
-                    keyText,
+                    selectedKey,
                     isKeyPlaying,
                     eventHandlers)
                 }
@@ -106,8 +98,8 @@ const Keyboard = ({
         } else if(chords.length > 0) {
             playChordsHandler(chords);     
         }
-    }
-    console.log("state before rendering log", state);
+    };
+
     return(
         <div className="keyboard-container">
             <div className="keyboard-layer-container">
@@ -121,4 +113,4 @@ const Keyboard = ({
     );
 };
 
-export  default Keyboard;
+export default Keyboard;
