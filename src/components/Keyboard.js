@@ -1,15 +1,8 @@
 import React, { Fragment, useState } from "react";
 import KeyLogger from "./Logger";
 import ChordPlayer from "./ChordPlayer";
-
-
-const octaves = [1, 2, 3, 4, 5, 6, 7];
-const tones = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-
-export const AllNotes = octaves.reduce((notes, octave)=> {
-    const octaveNotes = tones.map(tone => `${tone}${octave}`);
-    return [...notes, ...octaveNotes];
-}, []);
+import {BlackKey, WhiteKey, AllNotes} from "./Keys";
+import AllNotes from "../utils/Utils"
 
 const Keyboard = ({
     startKey,
@@ -21,29 +14,7 @@ const Keyboard = ({
     });
 
     const selectedNotes = AllNotes.slice(AllNotes.indexOf(startKey), AllNotes.indexOf(endKey) + 1);
-
-    const WhiteKey = (keyText, isKeyPlaying, eventHandlers) => {
-        return(
-            <button className={`white-key ${isKeyPlaying? "white-key-playing": ""}`}
-                { ...eventHandlers } >
-                <div className={"key-text"}>{keyText}</div>
-            </button>
-        );
-    };
  
-    const BlackKey = (keyText, isKeyPlaying, eventHandlers) => {
-        return(
-            <div className="black-key-wrapper">
-                <button className={`black-key 
-                    ${isKeyPlaying ? "black-key-playing": ""}`}
-                    { ...eventHandlers }
-                >
-                    <div className={"key-text"}>{keyText}</div>
-                </button>
-            </div>
-        );
-    };
-
     const onNotePressed = (playedKey) => {
         setState({
             ...state,
@@ -67,6 +38,7 @@ const Keyboard = ({
         const isKeyPlaying = state.playingKeys.includes(selectedKey);
 
         // We are only handling mouse and touch event, no keyboard event.
+        // move these into the key components themselves, and only pass onNotePressed, and onNoteReleased
         const eventHandlers = {
             onMouseDown: () => onNotePressed(selectedKey),
             onMouseUp: () => onNoteReleased(selectedKey),
@@ -77,6 +49,7 @@ const Keyboard = ({
 
         return (
             <Fragment key={selectedKey}>
+                {/* use a provider and dispatch to render each key */}
                 { RenderedKey(
                     selectedKey,
                     isKeyPlaying,
@@ -86,6 +59,7 @@ const Keyboard = ({
         );
     });
 
+    // add this to the reducer of ChordPlayer Component, use the provider to pass the onNotePressed and onNoteReleased 
     const playChordsHandler = (chords) => {
         const note = chords.shift();
         if(note && selectedNotes.includes(note)) {
@@ -105,7 +79,7 @@ const Keyboard = ({
             <div className="keyboard-layer-container">
                 {KeyboardLayedOut}
             </div>
-            <div className="key-logger-player">
+            <div className="key-logger-player"> {/* remove this, rather have it at the app component. coz its not part of the keyboard container atleast. */}
                 <KeyLogger log = {state.keyLogger}/>
                 <ChordPlayer onPlayChords={playChordsHandler}/>
             </div>
