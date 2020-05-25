@@ -1,42 +1,16 @@
-import React, { Fragment, useState } from "react";
-import KeyLogger from "./Logger";
-import ChordPlayer from "./ChordPlayer";
-import {BlackKey, WhiteKey, AllNotes} from "./Keys";
-import AllNotes from "../utils/Utils"
+import React, { Fragment, useContext } from "react";
+import { BlackKey, WhiteKey } from "./Keys";
+import { KeyboardContext } from "../contexts/KeyboardContext";
 
-const Keyboard = ({
-    startKey,
-    endKey
-}) => {
-    const [state, setState] = useState({
-        playingKeys: [],
-        keyLogger:""
-    });
 
-    const selectedNotes = AllNotes.slice(AllNotes.indexOf(startKey), AllNotes.indexOf(endKey) + 1);
- 
-    const onNotePressed = (playedKey) => {
-        setState({
-            ...state,
-            playingKeys: [...state.playingKeys, playedKey],
-            keyLogger: playedKey
-        });
-    };
-
-    const onNoteReleased = playedKey => {
-        if(playedKey && selectedNotes.includes(playedKey)) {
-            setState({
-                ...state,
-                playingKeys: state.playingKeys.filter(key => key !== playedKey),
-                keyLogger:""
-            });
-        }  
-    };
-  
+const Keyboard = () => {
+    const { selectedNotes, onNotePressed, onNoteReleased, playingKeys } = useContext(KeyboardContext);
+    console.log("selected keys", playingKeys);
     const KeyboardLayedOut = selectedNotes.map((selectedKey) => {
+        console.log("selectedKey", selectedKey.includes("#"));
         const RenderedKey = selectedKey.includes('#') ? BlackKey : WhiteKey;
-        const isKeyPlaying = state.playingKeys.includes(selectedKey);
-
+        const isKeyPlaying = playingKeys.includes(selectedKey);
+        console.log(`X ${selectedKey} is Playing ${isKeyPlaying}` );
         // We are only handling mouse and touch event, no keyboard event.
         // move these into the key components themselves, and only pass onNotePressed, and onNoteReleased
         const eventHandlers = {
@@ -46,44 +20,32 @@ const Keyboard = ({
             onTouchStart: () => onNotePressed(selectedKey),
             onTouchEnd: () => onNoteReleased(selectedKey)
         };
-
-        return (
-            <Fragment key={selectedKey}>
-                {/* use a provider and dispatch to render each key */}
-                { RenderedKey(
-                    selectedKey,
-                    isKeyPlaying,
-                    eventHandlers)
-                }
-            </Fragment>
-        );
+        const props = { selectedKey, isKeyPlaying, eventHandlers };
+        return <RenderedKey {...props}/>;
     });
+    console.log("Keys",KeyboardLayedOut);
 
     // add this to the reducer of ChordPlayer Component, use the provider to pass the onNotePressed and onNoteReleased 
-    const playChordsHandler = (chords) => {
-        const note = chords.shift();
-        if(note && selectedNotes.includes(note)) {
-            onNotePressed(note);
-            const intervalID = setTimeout(() => {
-                onNoteReleased(note);
-                clearTimeout(intervalID);
-                playChordsHandler(chords);
-            }, 1000);
-        } else if(chords.length > 0) {
-            playChordsHandler(chords);     
-        }
-    };
+    // const playChordsHandler = (chords) => {
+    //     const note = chords.shift();
+    //     if(note && selectedNotes.includes(note)) {
+    //         onNotePressed(note);
+    //         const intervalID = setTimeout(() => {
+    //             onNoteReleased(note);
+    //             clearTimeout(intervalID);
+    //             playChordsHandler(chords);
+    //         }, 1000);
+    //     } else if(chords.length > 0) {
+    //         playChordsHandler(chords);     
+    //     }
+    // };
 
     return(
-        <div className="keyboard-container">
+        // <div className="keyboard-container">
             <div className="keyboard-layer-container">
                 {KeyboardLayedOut}
-            </div>
-            <div className="key-logger-player"> {/* remove this, rather have it at the app component. coz its not part of the keyboard container atleast. */}
-                <KeyLogger log = {state.keyLogger}/>
-                <ChordPlayer onPlayChords={playChordsHandler}/>
-            </div>
-        </div>
+            </div>            
+        // </div>
     );
 };
 
